@@ -3,17 +3,19 @@ const mysql = require('mysql2');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3000;
+// Render asigna un puerto dinámico mediante process.env.PORT
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
 
-// 1. Configurar la conexión con MySQL (XAMPP)
+// 1. Configurar la conexión con MySQL usando las Variables de Entorno
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',      // Usuario por defecto en XAMPP
-  password: '',      // Contraseña por defecto en XAMPP (vacía)
-  database: 'fogon_criollo'
+  host: process.env.MYSQL_ADDON_HOST || 'localhost',
+  user: process.env.MYSQL_ADDON_USER || 'root',
+  password: process.env.MYSQL_ADDON_PASSWORD || '',
+  database: process.env.MYSQL_ADDON_DB || 'fogon_criollo',
+  port: process.env.MYSQL_ADDON_PORT || 3306
 });
 
 // 2. Conectar a la Base de Datos
@@ -41,14 +43,5 @@ app.get('/api/platos', (req, res) => {
 
 // 4. Iniciar el servidor
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor backend corriendo en http://localhost:${PORT}`);
+  console.log(`🚀 Servidor backend corriendo en el puerto ${PORT}`);
 });
-const mysql = require('mysql2'); // o 'mysql'
- const connection = mysql.createConnection({
-  host: process.env.MYSQL_ADDON_HOST,
-  user: process.env.MYSQL_ADDON_USER,
-  password: process.env.MYSQL_ADDON_PASSWORD,
-  database: process.env.MYSQL_ADDON_DB,
-  port: process.env.MYSQL_ADDON_PORT || 3306
-});
-module.exports = connection;
