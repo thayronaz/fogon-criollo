@@ -16,23 +16,28 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 // 1. Configurar la conexión con MySQL usando las Variables de Entorno
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.MYSQL_ADDON_HOST || 'localhost',
   user: process.env.MYSQL_ADDON_USER || 'root',
   password: process.env.MYSQL_ADDON_PASSWORD || '',
   database: process.env.MYSQL_ADDON_DB || 'fogon_criollo',
-  port: process.env.MYSQL_ADDON_PORT || 3306
+  port: process.env.MYSQL_ADDON_PORT || 3306,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 10000
 });
 
-// 2. Conectar a la Base de Datos
-db.connect(err => {
+// 2. Probar que la base de datos responda
+db.getConnection((err, connection) => {
   if (err) {
     console.error('❌ Error al conectar a la Base de Datos:', err);
   } else {
     console.log('✅ Conectado exitosamente a la Base de Datos MySQL');
+    connection.release(); // Liberamos la conexión de prueba
   }
 });
-
 // 3. Ruta para obtener todos los platos desde la BD
 app.get('/api/platos', (req, res) => {
   const sql = 'SELECT * FROM platos';
