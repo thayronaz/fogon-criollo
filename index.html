@@ -697,7 +697,7 @@
 <script>
   async function cargarCarta() {
     try {
-     const respuesta = await fetch('https://fogon-criollo.onrender.com');
+     const respuesta = await fetch('https://fogon-criollo.onrender.com/api/platos');
       const platos = await respuesta.json();
 
       // Limpiamos la lista estática
