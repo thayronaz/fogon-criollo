@@ -1,14 +1,20 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
-
+const path = require('path');
 const app = express();
 // Render asigna un puerto dinámico mediante process.env.PORT
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+// Servir archivos estáticos (HTML, JS, CSS, imágenes) desde la raíz
+app.use(express.static(__dirname));
 
+// Entregar el index.html en la ruta principal '/'
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 // 1. Configurar la conexión con MySQL usando las Variables de Entorno
 const db = mysql.createConnection({
   host: process.env.MYSQL_ADDON_HOST || 'localhost',
