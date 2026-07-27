@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Fogón Criollo — Cocina de brasa y tradición</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Work+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --carbon:#1b1512;
+    --smoke:#241d19;
+    --ember:#29e81b;
+    --ember-hot:#ff9142;
+    --corn:#d5d0c6;
+    --aji:#8f261b;
+    --cream:#f3e9d8;
+    --cream-dim:#cabca3;
+    --line: rgba(243,233,216,0.14);
+    --radius: 2px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--carbon);
+    color:var(--cream);
+    font-family:'Work Sans', sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    line-height:1.05;
+  }
+
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--ember-hot);
+    display:flex;
+    align-items:center;
+    gap:0.6em;
+  }
+  .eyebrow::before{
+    content:'';
+    width:18px;
+    height:1px;
+    background:var(--ember-hot);
+    display:inline-block;
+  }
+
+  a{color:inherit; text-decoration:none;}
+
+  img, svg{display:block; max-width:100%;}
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 6vw;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    background:rgba(27,21,18,0.86);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    transition:background .3s ease;
+  }
+  .nav{
+    max-width:1180px;
+    margin:0 auto;
+    padding:1.1rem 6vw;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-weight:900;
+    font-size:1.25rem;
+    letter-spacing:0.01em;
+    display:flex;
+    align-items:center;
+    gap:0.55rem;
+  }
+  .logo .flame{width:20px; height:20px; flex-shrink:0;}
+  .navlinks{
+    display:flex;
+    gap:2.2rem;
+    font-size:0.92rem;
+  }
+  .navlinks a{
+    position:relative;
+    padding:0.2rem 0;
+    color:var(--cream-dim);
+    transition:color .2s ease;
+  }
+  .navlinks a:hover, .navlinks a:focus-visible{color:var(--cream);}
+  .navlinks a::after{
+    content:'';
+    position:absolute;
+    left:0; bottom:-2px;
+    width:0%; height:1px;
+    background:var(--ember);
+    transition:width .25s ease;
+  }
+  .navlinks a:hover::after{width:100%;}
+
+  .nav-cta{
+    font-family:'Space Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    border:1px solid var(--ember);
+    color:var(--ember-hot);
+    padding:0.55rem 1.1rem;
+    border-radius:var(--radius);
+    transition:background .2s ease, color .2s ease;
+    white-space:nowrap;
+  }
+  .nav-cta:hover{background:var(--ember); color:var(--carbon);}
+
+  .burger{display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:0.4rem;}
+  .burger span{width:22px; height:2px; background:var(--cream);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding-top:5.5rem;
+    overflow:hidden;
+  }
+  .hero-glow{
+    position:absolute;
+    top:50%; right:8%;
+    width:min(48vw, 620px);
+    height:min(48vw, 620px);
+    transform:translateY(-50%);
+    border-radius:50%;
+    background:radial-gradient(circle at 42% 40%, var(--ember-hot) 0%, var(--ember) 30%, rgba(232,99,27,0.15) 55%, transparent 72%);
+    filter:blur(6px);
+    animation:breathe 5s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes breathe{
+    0%,100%{opacity:0.75; transform:translateY(-50%) scale(1);}
+    50%{opacity:1; transform:translateY(-50%) scale(1.045);}
+  }
+  .spark{
+    position:absolute;
+    bottom:18%;
+    width:4px; height:4px;
+    border-radius:50%;
+    background:var(--corn);
+    box-shadow:0 0 6px 1px var(--ember-hot);
+    opacity:0;
+    animation:rise 4.5s linear infinite;
+  }
+  @keyframes rise{
+    0%{opacity:0; transform:translateY(0) translateX(0);}
+    12%{opacity:1;}
+    100%{opacity:0; transform:translateY(-320px) translateX(var(--drift,20px));}
+  }
+
+  .hero-grid{
+    position:relative;
+    z-index:2;
+    width:100%;
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:2rem;
+    align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(2.6rem, 5.4vw, 4.6rem);
+    color:var(--cream);
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--ember-hot);
+  }
+  .hero p.lede{
+    margin-top:1.4rem;
+    max-width:36ch;
+    font-size:1.08rem;
+    color:var(--cream-dim);
+    font-weight:300;
+  }
+  .hero-actions{
+    margin-top:2.4rem;
+    display:flex;
+    gap:1rem;
+    flex-wrap:wrap;
+  }
+  .btn{
+    font-family:'Space Mono', monospace;
+    font-size:0.82rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    padding:0.95rem 1.7rem;
+    border-radius:var(--radius);
+    display:inline-flex;
+    align-items:center;
+    gap:0.6rem;
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+  }
+  .btn-solid{
+    background:var(--ember);
+    color:var(--carbon);
+    border:1px solid var(--ember);
+  }
+  .btn-solid:hover{background:var(--ember-hot); transform:translateY(-2px); box-shadow:0 10px 24px -10px rgba(232,99,27,0.55);}
+  .btn-ghost{
+    border:1px solid var(--line);
+    color:var(--cream);
+  }
+  .btn-ghost:hover{border-color:var(--cream); transform:translateY(-2px);}
+
+  .hero-stat{
+    margin-top:3.2rem;
+    display:flex;
+    gap:2.4rem;
+    font-family:'Space Mono', monospace;
+  }
+  .hero-stat div b{
+    display:block;
+    font-size:1.5rem;
+    color:var(--corn);
+  }
+  .hero-stat div span{
+    font-size:0.72rem;
+    color:var(--cream-dim);
+    letter-spacing:0.05em;
+  }
+
+
+  .char-edge{
+    display:block;
+    width:100%;
+    height:26px;
+    line-height:0;
+  }
+  .char-edge.up{transform:rotate(180deg);}
+
+ 
+  section{padding:7.5rem 0;}
+  .section-head{
+    max-width:640px;
+    margin-bottom:3.5rem;
+  }
+  .section-head h2{
+    margin-top:0.9rem;
+    font-size:clamp(2rem, 3.4vw, 2.9rem);
+  }
+
+  .historia{background:var(--smoke);}
+  .historia-grid{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:4rem;
+    align-items:center;
+  }
+  .fogon-illustration{
+    aspect-ratio:4/5;
+    border-radius:var(--radius);
+    background:
+      radial-gradient(circle at 50% 30%, rgba(255,145,66,0.35), transparent 55%),
+      repeating-linear-gradient(115deg, #241d19 0 3px, #2b221d 3px 6px),
+      linear-gradient(180deg, #1b1512, #100c0a);
+    position:relative;
+    overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .fogon-illustration .ring{
+    position:absolute;
+    left:50%; top:62%;
+    width:70%; aspect-ratio:1;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    border:2px solid var(--corn);
+    opacity:0.55;
+  }
+  .fogon-illustration .ring.r2{width:48%; border-color:var(--ember-hot); opacity:0.8;}
+  .fogon-illustration .ring.r3{width:26%; background:radial-gradient(circle, var(--ember-hot), var(--ember) 70%); border:none; filter:blur(1px);}
+  .fogon-illustration .label{
+    position:absolute; bottom:1.4rem; left:1.4rem; right:1.4rem;
+    font-family:'Space Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.08em;
+    color:var(--cream-dim);
+    text-transform:uppercase;
+  }
+
+  .historia-text p{
+    color:var(--cream-dim);
+    font-weight:300;
+    margin-top:1.2rem;
+    max-width:52ch;
+  }
+  .historia-text p:first-of-type{margin-top:1.6rem;}
+  .firma{
+    margin-top:2.2rem;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1.05rem;
+    color:var(--corn);
+  }
+
+  /* ---------- MENU ---------- */
+  .menu{background:var(--carbon);}
+  .menu-tabs{
+    display:flex;
+    gap:0.6rem;
+    flex-wrap:wrap;
+    margin-bottom:3rem;
+    font-family:'Space Mono', monospace;
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+  .menu-tab{
+    padding:0.6rem 1.1rem;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    color:var(--cream-dim);
+    cursor:pointer;
+    background:none;
+    transition:all .2s ease;
+  }
+  .menu-tab.active, .menu-tab:hover{
+    border-color:var(--ember);
+    color:var(--ember-hot);
+  }
+
+  .menu-category{display:none;}
+  .menu-category.active{display:block; animation:fade .4s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .menu-list{
+    display:grid;
+    gap:0;
+  }
+  .menu-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:1rem;
+    padding:1.4rem 0;
+    border-bottom:1px dashed var(--line);
+  }
+  .menu-item:first-child{border-top:1px dashed var(--line);}
+  .menu-item-name{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.18rem;
+  }
+  .menu-item-desc{
+    font-weight:300;
+    font-size:0.88rem;
+    color:var(--cream-dim);
+    margin-top:0.3rem;
+    max-width:46ch;
+  }
+  .menu-item-price{
+    font-family:'Space Mono', monospace;
+    color:var(--corn);
+    white-space:nowrap;
+    font-size:1.02rem;
+  }
+
+  
+  .franja{
+    background:linear-gradient(100deg, var(--aji), #6f1c13 60%, var(--carbon));
+    padding:4.5rem 0;
+    text-align:center;
+  }
+  .franja h2{font-size:clamp(1.8rem, 3vw, 2.4rem); color:var(--cream);}
+  .franja p{color:var(--cream-dim); margin-top:0.8rem; font-weight:300;}
+  .franja .btn{margin-top:2rem;}
+
+  /* ---------- CONTACTO / FOOTER ---------- */
+  footer{background:var(--smoke); padding-top:6rem;}
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.2fr 0.9fr 0.9fr;
+    gap:3rem;
+    padding-bottom:4rem;
+    border-bottom:1px solid var(--line);
+  }
+  footer h3{font-size:1.1rem; margin-bottom:1rem; color:var(--corn);}
+  .footer-grid p, .footer-grid a{color:var(--cream-dim); font-weight:300; font-size:0.94rem;}
+  .footer-grid .col a{
+    display:block;
+    margin-bottom:0.6rem;
+    transition:color .2s ease;
+  }
+  .footer-grid .col a:hover{color:var(--ember-hot);}
+  .hours-row{display:flex; justify-content:space-between; max-width:280px; margin-bottom:0.5rem; font-size:0.9rem;}
+  .hours-row span:last-child{font-family:'Space Mono', monospace; color:var(--cream);}
+  .bottom-bar{
+    max-width:1180px;
+    margin:0 auto;
+    padding:1.6rem 6vw;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:0.6rem;
+    font-family:'Space Mono', monospace;
+    font-size:0.72rem;
+    color:var(--cream-dim);
+    letter-spacing:0.04em;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-glow{opacity:0.5; width:80vw; height:80vw; right:-10%;}
+    .historia-grid{grid-template-columns:1fr;}
+    .fogon-illustration{max-width:340px;}
+    .footer-grid{grid-template-columns:1fr; gap:2.4rem;}
+  }
+  @media (max-width:760px){
+    .navlinks, .nav-cta{display:none;}
+    .burger{display:flex;}
+    .navlinks.open{
+      display:flex;
+      position:absolute;
+      top:100%; left:0; right:0;
+      flex-direction:column;
+      background:var(--carbon);
+      padding:1.5rem 6vw;
+      border-bottom:1px solid var(--line);
+      gap:1.2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-glow, .spark{animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <div class="logo">
+      <svg class="flame" viewBox="0 0 24 24" fill="none"><path d="M12 2C12 2 7 7 7 12.5C7 16.09 9.24 19 12.5 19C15.76 19 18 16.5 18 13.5C18 10.5 15.5 9 15.5 9C15.5 9 16 11.5 14.5 12.5C14.5 12.5 15 8 12 2Z" fill="#E8631B"/><path d="M11 13C11 13 9.5 14.5 9.5 16.2C9.5 17.75 10.6 19 12.1 19C13.6 19 14.7 17.85 14.7 16.4C14.7 14.9 13 13.5 13 13.5C13 13.5 13.3 15 12.4 15.5C12.4 15.5 12.5 14 11 13Z" fill="#FF9142"/></svg>
+      El Fogón Criollo
+    </div>
+    <div class="navlinks" id="navlinks">
+      <a href="#historia">Nosotros</a>
+      <a href="#menu">Menú</a>
+      <a href="#contacto">Ubicación</a>
+      <a href="#contacto">Horarios</a>
+    </div>
+    <a href="#contacto" class="nav-cta">Reservar mesa</a>
+    <button class="burger" id="burger" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div id="sparks"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Picantería criolla · La Molina Jesus Maria,  Lima </p>
+      <h1>El sabor se cocina<br>a fuego <em>lento y vivo</em></h1>
+      <p class="lede">Anticuchos, causas y guisos de siempre, hechos como en casa de la abuela: sobre brasa, con paciencia y sin apuro.</p>
+      <div class="hero-actions">
+        <a href="#menu" class="btn btn-solid">Ver la carta</a>
+        <a href="#contacto" class="btn btn-ghost">Reservar mesa</a>
+      </div>
+      <div class="hero-stat">
+        <div><b>34</b><span>años de fogón</span></div>
+        <div><b>+40</b><span>platos criollos</span></div>
+        <div><b>6</b><span>días a la semana</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<svg class="char-edge" viewBox="0 0 1200 26" preserveAspectRatio="none"><path d="M0,0 L0,14 L40,20 L80,10 L120,22 L160,8 L200,18 L240,6 L280,20 L320,12 L360,24 L400,10 L440,18 L480,6 L520,20 L560,14 L600,24 L640,8 L680,20 L720,12 L760,22 L800,6 L840,18 L880,10 L920,24 L960,14 L1000,20 L1040,8 L1080,22 L1120,12 L1160,20 L1200,10 L1200,0 Z" fill="#241d19"/></svg>
+
+<section class="historia" id="historia">
+  <div class="wrap historia-grid">
+    <div class="fogon-illustration">
+      <div class="ring"></div>
+      <div class="ring r2"></div>
+      <div class="ring r3"></div>
+      <div class="label">El fogón — desde 1990</div>
+    </div>
+    <div class="historia-text">
+      <p class="eyebrow">Nuestra historia</p>
+      <h2>Una cocina que no ha dejado de arder</h2>
+      <p>El Fogón Criollo nació en la cocina de doña Rosa, en un patio de Barranco donde el carbón nunca se apagaba los domingos. Lo que empezó como almuerzos para la familia terminó convirtiéndose en el lugar donde medio barrio venía a comer causa y anticuchos.</p>
+      <p>Hoy seguimos preparando cada plato como entonces: sin atajos, con los mismos ajíes molidos en piedra y el mismo fuego de leña que le da su sabor a la brasa.</p>
+      <p class="firma">— La familia Quispe, tres generaciones al fogón</p>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">La carta</p>
+      <h2>Lo que sale de la brasa</h2>
+    </div>
+
+    <div class="menu-tabs" role="tablist">
+      <button class="menu-tab active" data-tab="piqueos">Piqueos</button>
+      <button class="menu-tab" data-tab="fondos">Fondos</button>
+      <button class="menu-tab" data-tab="dulces">Dulces</button>
+      <button class="menu-tab" data-tab="tragos">Chelas y tragos</button>
+    </div>
+
+    <div class="menu-category active" id="piqueos">
+      <div class="menu-list">
+        <div class="menu-item">
+          <div><div class="menu-item-name">Anticuchos de corazón</div><div class="menu-item-desc">Sobre carbón, con papa dorada y ají panca</div></div>
+          <div class="menu-item-price">S/ 28</div>
+        </div>
+        <div class="menu-item">
+          <div><div class="menu-item-name">Causa limeña de pollo</div><div class="menu-item-desc">Papa amarilla, ají amarillo y palta</div></div>
+          <div class="menu-item-price">S/ 22</div>
+        </div>
+        <div class="menu-item">
+          <div><div class="menu-item-name">Choritos a la chalaca</div><div class="menu-item-desc">Choclo, cebolla y limón</div></div>
+          <div class="menu-item-price">S/ 26</div>
+        </div>
+        <div class="menu-item">
+          <div><div class="menu-item-name">Tequeños de queso</div><div class="menu-item-desc">Con salsa de guacamole casera</div></div>
+          <div class="menu-item-price">S/ 18</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-category" id="fondos">
+      <div class="menu-list">
+        <div class="menu-item">
+          <div><div class="menu-item-name">Lomo saltado</div><div class="menu-item-desc">Res salteada al wok, papas fritas y arroz</div></div>
+          <div class="menu-item-price">S/ 38</div>
+        </div>
+        <div class="menu-item">
+          <div><div class="menu-item-name">Ají de gallina</div><div class="menu-item-desc">Cremoso, con nueces y aceituna</div></div>
+          <div class="menu-item-price">S/ 32</div>
+        </div>
+        <div class="menu-item">
+          <div><div class="menu-item-name">Seco de res con frejoles</div><div class="menu-item-desc">Cocción lenta en culantro</div></div>
+          <div class="menu-item-price">S/ 36</div>
+        </div>
+        <div class="menu-item">
+          <div><div class="menu-item-name">Arroz con pato</div><div class="menu-item-desc">A la chiclayana, con chicha de jora</div></div>
+          <div class="menu-item-price">S/ 34</div>
+        </div>
+        <div class="menu-item">
+          <div><div class="menu-item-name">Cau cau de mondongo</div><div class="menu-item-desc">Con hierbabuena y arvejas</div></div>
+          <div class="menu-item-price">S/ 30</div>
+        </div>
+        <div class="menu-item">
+          <div><div class="menu-item-name">Chicharrón de chancho</div><div class="menu-item-desc">Con camote frito y salsa criolla</div></div>
+          <div class="menu-item-price">S/ 35</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-category" id="dulces">
+      <div class="menu-list">
+        <div class="menu-item">
+          <div><div class="menu-item-name">Suspiro a la limeña</div><div class="menu-item-desc">Manjar blanco y merengue al oporto</div></div>
+          <div class="menu-item-price">S/ 16</div>
+        </div>
+        <div class="menu-item">
+          <div><div class="menu-item-name">Picarones con miel de chancaca</div><div class="menu-item-desc">Zapallo y camote, recién fritos</div></div>
+          <div class="menu-item-price">S/ 14</div>
+        </div>
+        <div class="menu-item">
+          <div><div class="menu-item-name">Arroz zambito</div><div class="menu-item-desc">Con pasas y canela</div></div>
+          <div class="menu-item-price">S/ 13</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-category" id="tragos">
+      <div class="menu-list">
+        <div class="menu-item">
+          <div><div class="menu-item-name">Pisco sour clásico</div><div class="menu-item-desc">Pisco quebranta, limón y clara de huevo</div></div>
+          <div class="menu-item-price">S/ 24</div>
+        </div>
+        <div class="menu-item">
+          <div><div class="menu-item-name">Chilcano de pisco</div><div class="menu-item-desc">Con ginger ale y bitters</div></div>
+          <div class="menu-item-price">S/ 22</div>
+        </div>
+        <div class="menu-item">
+          <div><div class="menu-item-name">Chicha morada</div><div class="menu-item-desc">Casera, con piña y membrillo</div></div>
+          <div class="menu-item-price">S/ 12</div>
+        </div>
+        <div class="menu-item">
+          <div><div class="menu-item-name">Cerveza artesanal</div><div class="menu-item-desc">Selección de cervecerías limeñas</div></div>
+          <div class="menu-item-price">S/ 18</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="franja">
+  <div class="wrap">
+    <h2>El domingo se separa mesa</h2>
+    <p>Los fines de semana el fogón se llena rápido. Reserva con anticipación y no te quedes sin causa.</p>
+    <a href="tel:01(2621396)" class="btn btn-solid">Llamar y reservar</a>
+  </div>
+</div>
+
+<footer id="contacto">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="col">
+        <h3>El Fogón Criollo</h3>
+        <p>Av Cuba 1173, Jesus Maria</p>
+        <p>Av Los Constructores 195, La Molina</p>
+        <p style="margin-top:1rem;">Cocina criolla de brasa, desde 1990.</p>
+      </div>
+      <div class="col">
+        <h3>Horario</h3>
+        <div class="hours-row"><span>Martes a viernes</span><span>12:00 – 23:00</span></div>
+        <div class="hours-row"><span>Sábado y domingo</span><span>12:00 – 23:30</span></div>
+        <div class="hours-row"><span>Lunes</span><span>Cerrado</span></div>
+      </div>
+      <div class="col">
+  <h3>Contacto</h3>
+<p><a href="tel:012621396">Jesús María: (01) 262-1396</a></p>
+<p><a href="tel:013485427">La Molina: (01) 3485427</a></p>
+<p><a href="mailto:reservas@elfogoncriollo.pe">reservas@elfogoncriollo.pe</a></p>
+<p><a href="#">Instagram</a></p>
+<p><a href="#">WhatsApp</a></p>
+      </div>
+    </div>
+    <div class="bottom-bar">
+      <span>© 2026 El Fogón Criollo</span>
+      <span>Hecho al carbón, servido con cariño</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // menú por pestañas
+  document.querySelectorAll('.menu-tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('.menu-tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.menu-category').forEach(c=>c.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // menú móvil
+  const burger = document.getElementById('burger');
+  const navlinks = document.getElementById('navlinks');
+  burger.addEventListener('click', ()=> navlinks.classList.toggle('open'));
+  navlinks.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> navlinks.classList.remove('open')));
+
+  // chispas ambientales del fogón
+  const sparksHost = document.getElementById('sparks');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduceMotion){
+    for(let i=0;i<14;i++){
+      const s = document.createElement('div');
+      s.className='spark';
+      const right = 6 + Math.random()*40;
+      s.style.right = right+'%';
+      s.style.bottom = (10 + Math.random()*15)+'%';
+      s.style.setProperty('--drift', (Math.random()*40-20)+'px');
+      s.style.animationDelay = (Math.random()*4.5)+'s';
+      s.style.animationDuration = (3.5+Math.random()*2.5)+'s';
+      sparksHost.appendChild(s);
+    }
+    sparksHost.style.position='absolute';
+    sparksHost.style.inset='0';
+    sparksHost.style.pointerEvents='none';
+  }
+</script>
+<script>
+  async function cargarCarta() {
+    try {
+      const respuesta = await fetch('http://localhost:3000/api/platos');
+      const platos = await respuesta.json();
+
+      // Limpiamos la lista estática
+      document.querySelectorAll('.menu-category .menu-list').forEach(lista => lista.innerHTML = '');
+
+      // Inyectamos los platos dinámicos
+      platos.forEach(plato => {
+        const categoriaContenedor = document.querySelector(`#${plato.categoria} .menu-list`);
+        
+        if (categoriaContenedor) {
+          const itemHTML = `
+            <div class="menu-item">
+              <div>
+                <div class="menu-item-name">${plato.nombre}</div>
+                <div class="menu-item-desc">${plato.descripcion}</div>
+              </div>
+              <div class="menu-item-price">S/ ${plato.precio}</div>
+            </div>
+          `;
+          categoriaContenedor.innerHTML += itemHTML;
+        }
+      });
+
+    } catch (error) {
+      console.error('Error al conectar con el servidor:', error);
+    }
+  }
+
+  cargarCarta();
+</script>
+</script>
+</body>
+</html>
